@@ -3,15 +3,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
+import { clearChat } from "../utils/chatSlice";
+import { clearNotifications } from "../utils/notificationSlice";
+import { disconnectSocket } from "../utils/socketManager";
+import NotificationDropdown from "./NotificationDropdown";
 
 const Navbar = () => {
   const user = useSelector((store) => store.user);
+  const unreadCount = useSelector((store) => store.chat.unreadCount);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
       await axios.post(BASE_URL + "/logout", {}, { withCredentials: true });
+      disconnectSocket();
+      dispatch(clearChat());
+      dispatch(clearNotifications());
       dispatch(removeUser());
       return navigate("/login");
     } catch (error) {
@@ -31,6 +39,24 @@ const Navbar = () => {
 
         {user && (
           <div className="flex items-center gap-4">
+            {/* Chat icon */}
+            <Link
+              to="/chat"
+              className="relative p-2 rounded-lg text-muted hover:text-accent transition-colors duration-200"
+              aria-label="Messages"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              </svg>
+              {unreadCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center bg-accent text-bg font-mono text-[10px] font-bold rounded-full px-1">
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
+            </Link>
+
+            <NotificationDropdown />
+
             <span className="hidden sm:block font-mono text-sm text-muted">
               <span className="text-accent/80">~</span> {user.firstName}
             </span>
@@ -57,6 +83,11 @@ const Navbar = () => {
                 <li>
                   <Link to="/connections">
                     <span className="text-accent/50 mr-1">→</span> connections
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/chat">
+                    <span className="text-accent/50 mr-1">→</span> messages
                   </Link>
                 </li>
                 <li>

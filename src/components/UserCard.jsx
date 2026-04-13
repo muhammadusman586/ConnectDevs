@@ -5,7 +5,7 @@ import { removeUserFromFeed } from "../utils/feedSlice";
 import SkillBadge from "./SkillBadge";
 
 /* eslint-disable react/prop-types */
-const UserCard = ({ user }) => {
+const UserCard = ({ user, hideActions = false, swipeDirection = null }) => {
   const dispatch = useDispatch();
 
   const handleSendRequest = async (status, userId) => {
@@ -35,8 +35,26 @@ const UserCard = ({ user }) => {
   const overflowCount = (skills?.length || 0) - MAX_DISPLAY;
 
   return (
-    <div className="w-full max-w-sm animate-slide-up">
-      <div className="bg-elevated border border-border rounded-xl shadow-term overflow-hidden card-glow">
+    <div className="w-full max-w-sm animate-slide-up select-none">
+      <div className="relative bg-elevated border border-border rounded-xl shadow-term overflow-hidden card-glow">
+        {/* Swipe overlay */}
+        {swipeDirection && (
+          <div
+            className={`absolute inset-0 z-10 flex items-center justify-center rounded-xl transition-opacity duration-150 ${
+              swipeDirection === "right"
+                ? "bg-accent/15 border-2 border-accent"
+                : "bg-red-400/15 border-2 border-red-400"
+            }`}
+          >
+            <span
+              className={`font-display font-bold text-3xl tracking-wider ${
+                swipeDirection === "right" ? "text-accent" : "text-red-400"
+              }`}
+            >
+              {swipeDirection === "right" ? "CONNECT" : "PASS"}
+            </span>
+          </div>
+        )}
         {/* Photo */}
         <div className="relative aspect-[4/3] overflow-hidden">
           <img
@@ -78,7 +96,7 @@ const UserCard = ({ user }) => {
           )}
 
           {/* Actions */}
-          {_id && (
+          {_id && !hideActions && (
             <div className="flex gap-3 pt-2">
               <button
                 className="flex-1 py-2.5 px-4 bg-surface border border-border text-muted font-mono text-sm rounded-lg hover:border-red-400/40 hover:text-red-400 transition-all duration-200 active:scale-[0.98]"

@@ -1,14 +1,18 @@
 import axios from "axios";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import { addConnections } from "../utils/connectionSlice";
 import SkillBadge from "./SkillBadge";
+import SkeletonListItem from "./skeletons/SkeletonListItem";
+import SearchBar from "./SearchBar";
 
 const Connections = () => {
   const connections = useSelector((store) => store.connections);
   const dispatch = useDispatch();
+  const [search, setSearch] = useState("");
   const fetchConnections = async () => {
     try {
       const res = await axios.get(BASE_URL + "/user/connections", {
@@ -25,7 +29,20 @@ const Connections = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!connections) return null;
+  if (!connections)
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-6">
+        <p className="font-mono text-xs text-muted mb-6">
+          <span className="text-accent">$</span> loading connections
+          <span className="animate-blink ml-1 text-accent">▋</span>
+        </p>
+        <div className="space-y-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <SkeletonListItem key={i} />
+          ))}
+        </div>
+      </div>
+    );
 
   if (connections.length === 0) {
     return (
@@ -54,8 +71,32 @@ const Connections = () => {
         </p>
       </div>
 
+      <div className="mb-4">
+        <SearchBar
+          value={search}
+          onChange={setSearch}
+          placeholder="grep connections..."
+        />
+      </div>
+
       <div className="space-y-3">
-        {connections.map((connection, index) => {
+        {(() => {
+          const filtered = search
+            ? connections.filter((c) => {
+                const name = `${c.firstName} ${c.lastName}`.toLowerCase();
+                return name.includes(search.toLowerCase());
+              })
+            : connections;
+
+          if (filtered.length === 0) {
+            return (
+              <div className="py-8 text-center font-mono text-sm text-muted/50">
+                <span className="text-accent/40">$</span> no matches for "{search}"
+              </div>
+            );
+          }
+
+          return filtered.map((connection, index) => {
           const { _id, firstName, lastName, photoUrl, age, gender, about, skills } =
             connection;
 
@@ -95,9 +136,16 @@ const Connections = () => {
                   </div>
                 )}
               </div>
+              <Link
+                to={`/chat/${_id}`}
+                className="shrink-0 py-2 px-3 bg-surface border border-border text-muted font-mono text-xs rounded-lg hover:border-accent/40 hover:text-accent transition-all duration-200 active:scale-[0.97]"
+              >
+                message
+              </Link>
             </div>
           );
-        })}
+        });
+        })()}
       </div>
     </div>
   );

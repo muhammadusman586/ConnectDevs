@@ -4,6 +4,17 @@ import { Outlet, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { addUser } from "../utils/userSlice";
+import { connectSocket, disconnectSocket, getSocket } from "../utils/socketManager";
+import {
+  setOnlineUsers,
+  addOnlineUser,
+  removeOnlineUser,
+  addMessage,
+  addTypingUser,
+  removeTypingUser,
+  setUnreadCount,
+} from "../utils/chatSlice";
+import { addNotification } from "../utils/notificationSlice";
 
 const ProtectedRoute = () => {
   const user = useSelector((store) => store.user);
@@ -31,6 +42,62 @@ const ProtectedRoute = () => {
     verifyAuth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Initialize socket once user is available
+  useEffect(() => {
+    if (!user) return;
+
+    // Get token from cookie for socket auth
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+
+    if (!token) return;
+
+    const socket = connectSocket(token);
+
+    socket.on("onlineUsers", (users) => {
+      dispatch(setOnlineUsers(users));
+    });
+    socket.on("userOnline", ({ userId }) => {
+      dispatch(addOnlineUser(userId));
+    });
+    socket.on("userOffline", ({ userId }) => {
+      dispatch(removeOnlineUser(userId));
+    });
+    socket.on("receiveMessage", (msg) => {
+      dispatch(addMessage({ userId: msg.senderId, message: msg }));
+      // Bump unread count
+      fetchUnread();
+    });
+    socket.on("userTyping", ({ userId }) => {
+      dispatch(addTypingUser(userId));
+    });
+    socket.on("userStopTyping", ({ userId }) => {
+      dispatch(removeTypingUser(userId));
+    });
+    socket.on("newNotification", (notification) => {
+      dispatch(addNotification(notification));
+    });
+
+    const fetchUnread = async () => {
+      try {
+        const res = await axios.get(BASE_URL + "/chat/unread/count", {
+          withCredentials: true,
+        });
+        dispatch(setUnreadCount(res.data.data));
+      } catch {
+        // ignore
+      }
+    };
+    fetchUnread();
+
+    return () => {
+      disconnectSocket();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   if (isVerifying) {
     return (

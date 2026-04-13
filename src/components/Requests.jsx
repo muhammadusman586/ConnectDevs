@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addRequests, removeRequest } from "../utils/requestSlice";
 import { useEffect } from "react";
 import SkillBadge from "./SkillBadge";
+import SkeletonListItem from "./skeletons/SkeletonListItem";
 
 const Requests = () => {
   const requests = useSelector((store) => store.requests);
@@ -39,7 +40,20 @@ const Requests = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!requests) return null;
+  if (!requests)
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-6">
+        <p className="font-mono text-xs text-muted mb-6">
+          <span className="text-accent">$</span> loading requests
+          <span className="animate-blink ml-1 text-accent">▋</span>
+        </p>
+        <div className="space-y-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <SkeletonListItem key={i} />
+          ))}
+        </div>
+      </div>
+    );
 
   if (requests.length === 0) {
     return (
