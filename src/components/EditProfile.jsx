@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import UserCard from "./UserCard";
+import SkillTagInput from "./SkillTagInput";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch } from "react-redux";
@@ -13,6 +14,7 @@ const EditProfile = ({ user }) => {
   const [gender, setGender] = useState(user.gender || "");
   const [about, setAbout] = useState(user.about);
   const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
+  const [skills, setSkills] = useState(user.skills || []);
   const [toast, setToast] = useState(false);
 
   const dispatch = useDispatch();
@@ -31,6 +33,7 @@ const EditProfile = ({ user }) => {
           age,
           gender,
           about,
+          skills,
         },
         { withCredentials: true }
       );
@@ -89,6 +92,8 @@ const EditProfile = ({ user }) => {
                 </div>
               ))}
 
+              <SkillTagInput skills={skills} onChange={setSkills} />
+
               {error && (
                 <p className="font-mono text-xs text-red-400 bg-red-400/10 px-3 py-2 rounded-lg">
                   ✗ {error}
@@ -114,7 +119,7 @@ const EditProfile = ({ user }) => {
             <span className="text-accent">$</span> preview
           </p>
           <UserCard
-            user={{ firstName, lastName, photoUrl, age, gender, about }}
+            user={{ firstName, lastName, photoUrl, age, gender, about, skills }}
           />
         </div>
       </div>

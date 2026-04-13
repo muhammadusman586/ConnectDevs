@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL } from "../utils/constants";
 import { addConnections } from "../utils/connectionSlice";
+import SkillBadge from "./SkillBadge";
 
 const Connections = () => {
   const connections = useSelector((store) => store.connections);
@@ -55,7 +56,7 @@ const Connections = () => {
 
       <div className="space-y-3">
         {connections.map((connection, index) => {
-          const { _id, firstName, lastName, photoUrl, age, gender, about } =
+          const { _id, firstName, lastName, photoUrl, age, gender, about, skills } =
             connection;
 
           return (
@@ -80,6 +81,18 @@ const Connections = () => {
                 )}
                 {about && (
                   <p className="text-sm text-muted/80 mt-1 truncate">{about}</p>
+                )}
+                {skills?.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mt-1.5">
+                    {skills.slice(0, 3).map((skill) => (
+                      <SkillBadge key={skill} skill={skill} size="xs" />
+                    ))}
+                    {skills.length > 3 && (
+                      <span className="font-mono text-[10px] text-muted/50 self-center">
+                        +{skills.length - 3}
+                      </span>
+                    )}
+                  </div>
                 )}
               </div>
             </div>

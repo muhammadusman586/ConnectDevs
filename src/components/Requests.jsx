@@ -3,6 +3,7 @@ import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addRequests, removeRequest } from "../utils/requestSlice";
 import { useEffect } from "react";
+import SkillBadge from "./SkillBadge";
 
 const Requests = () => {
   const requests = useSelector((store) => store.requests);
@@ -69,7 +70,7 @@ const Requests = () => {
 
       <div className="space-y-3">
         {requests.map((request, index) => {
-          const { _id, firstName, lastName, photoUrl, age, gender, about } =
+          const { _id, firstName, lastName, photoUrl, age, gender, about, skills } =
             request.fromUserId;
 
           return (
@@ -94,6 +95,18 @@ const Requests = () => {
                 )}
                 {about && (
                   <p className="text-sm text-muted/80 mt-1 truncate">{about}</p>
+                )}
+                {skills?.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mt-1.5">
+                    {skills.slice(0, 3).map((skill) => (
+                      <SkillBadge key={skill} skill={skill} size="xs" />
+                    ))}
+                    {skills.length > 3 && (
+                      <span className="font-mono text-[10px] text-muted/50 self-center">
+                        +{skills.length - 3}
+                      </span>
+                    )}
+                  </div>
                 )}
               </div>
               <div className="flex gap-2 shrink-0">

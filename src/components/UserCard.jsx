@@ -2,6 +2,7 @@ import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
+import SkillBadge from "./SkillBadge";
 
 /* eslint-disable react/prop-types */
 const UserCard = ({ user }) => {
@@ -28,7 +29,10 @@ const UserCard = ({ user }) => {
     );
   }
 
-  const { _id, firstName, lastName, photoUrl, age, gender, about } = user;
+  const { _id, firstName, lastName, photoUrl, age, gender, about, skills } = user;
+  const MAX_DISPLAY = 4;
+  const displaySkills = skills?.slice(0, MAX_DISPLAY) || [];
+  const overflowCount = (skills?.length || 0) - MAX_DISPLAY;
 
   return (
     <div className="w-full max-w-sm animate-slide-up">
@@ -58,6 +62,19 @@ const UserCard = ({ user }) => {
 
           {about && (
             <p className="text-sm text-muted leading-relaxed">{about}</p>
+          )}
+
+          {displaySkills.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {displaySkills.map((skill) => (
+                <SkillBadge key={skill} skill={skill} size="xs" />
+              ))}
+              {overflowCount > 0 && (
+                <span className="font-mono text-[10px] text-muted/60 self-center">
+                  +{overflowCount} more
+                </span>
+              )}
+            </div>
           )}
 
           {/* Actions */}
