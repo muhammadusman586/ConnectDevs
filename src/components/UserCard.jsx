@@ -5,13 +5,11 @@ import { removeUserFromFeed } from "../utils/feedSlice";
 
 /* eslint-disable react/prop-types */
 const UserCard = ({ user }) => {
-  // eslint-disable-next-line no-unused-vars
   const dispatch = useDispatch();
 
   const handleSendRequest = async (status, userId) => {
     try {
-      // eslint-disable-next-line no-unused-vars
-      const res = await axios.post(
+      await axios.post(
         BASE_URL + "/request/send/" + status + "/" + userId,
         {},
         { withCredentials: true }
@@ -21,34 +19,64 @@ const UserCard = ({ user }) => {
       console.error(error);
     }
   };
+
   if (!user) {
-    return <div>User data is not available.</div>; // Handle undefined or null user gracefully
+    return (
+      <div className="font-mono text-sm text-muted text-center p-8">
+        <span className="text-accent">$</span> No user data available
+      </div>
+    );
   }
 
   const { _id, firstName, lastName, photoUrl, age, gender, about } = user;
 
   return (
-    <div className="card bg-base-300 w-96 shadow-xl">
-      <figure>
-        <img src={photoUrl} alt="User's photo" />
-      </figure>
-      <div className="card-body">
-        <h2 className="card-title">{firstName + " " + lastName}</h2>
-        <p>{age && gender && `${age} ${gender}`}</p>
-        <p>{about}</p>
-        <div className="card-actions justify-center mx-4">
-          <button
-            className="btn btn-primary"
-            onClick={() => handleSendRequest("ignore", _id)}
-          >
-            Ignore
-          </button>
-          <button
-            className="btn btn-secondary"
-            onClick={()=>handleSendRequest("interested", _id)}
-          >
-            Interested
-          </button>
+    <div className="w-full max-w-sm animate-slide-up">
+      <div className="bg-elevated border border-border rounded-xl shadow-term overflow-hidden card-glow">
+        {/* Photo */}
+        <div className="relative aspect-[4/3] overflow-hidden">
+          <img
+            src={photoUrl}
+            alt={`${firstName}'s photo`}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-elevated via-transparent to-transparent" />
+        </div>
+
+        {/* Info */}
+        <div className="p-5 space-y-3">
+          <div>
+            <h2 className="font-display font-bold text-xl text-body">
+              {firstName + " " + lastName}
+            </h2>
+            {age && gender && (
+              <p className="font-mono text-xs text-muted mt-1">
+                <span className="text-accent/60">#</span> {age} · {gender}
+              </p>
+            )}
+          </div>
+
+          {about && (
+            <p className="text-sm text-muted leading-relaxed">{about}</p>
+          )}
+
+          {/* Actions */}
+          {_id && (
+            <div className="flex gap-3 pt-2">
+              <button
+                className="flex-1 py-2.5 px-4 bg-surface border border-border text-muted font-mono text-sm rounded-lg hover:border-red-400/40 hover:text-red-400 transition-all duration-200 active:scale-[0.98]"
+                onClick={() => handleSendRequest("ignore", _id)}
+              >
+                pass
+              </button>
+              <button
+                className="flex-1 py-2.5 px-4 bg-accent text-bg font-mono text-sm font-semibold rounded-lg hover:bg-accent-bright transition-all duration-200 active:scale-[0.98] shadow-glow-sm"
+                onClick={() => handleSendRequest("interested", _id)}
+              >
+                connect
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -45,103 +45,85 @@ const EditProfile = ({ user }) => {
     }
   };
 
+  const fields = [
+    { label: "firstName", value: firstName, setter: setFirstName },
+    { label: "lastName", value: lastName, setter: setLastName },
+    { label: "photoUrl", value: photoUrl, setter: setPhotoUrl },
+    { label: "age", value: age, setter: setAge },
+    { label: "gender", value: gender, setter: setGender },
+    { label: "about", value: about, setter: setAbout },
+  ];
+
   return (
     <>
-      <div className="flex justify-center my-10">
-        <div>
-          {" "}
-          <div className="flex justify-center mx-10">
-            <div className="card bg-base-300 w-96 shadow-xl">
-              <div className="card-body">
-                <h2 className="card-title justify-center"> Edit Profile</h2>
-                <div>
-                  <label className="form-control w-full max-w-xs my-2">
-                    <div className="label">
-                      <span className="label-text">First Name:</span>
-                    </div>
-                    <input
-                      type="text"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      className="input input-bordered w-full max-w-xs"
-                    />
+      <div className="flex flex-col lg:flex-row items-start justify-center gap-8 px-4 py-6 max-w-5xl mx-auto">
+        {/* Edit form */}
+        <div className="w-full max-w-md animate-slide-up">
+          <div className="bg-elevated border border-border rounded-xl shadow-term overflow-hidden">
+            {/* Title bar */}
+            <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-surface">
+              <div className="w-3 h-3 rounded-full bg-[#ff5f56]/90" />
+              <div className="w-3 h-3 rounded-full bg-[#ffbd2e]/90" />
+              <div className="w-3 h-3 rounded-full bg-[#27c93f]/90" />
+              <span className="ml-3 font-mono text-xs text-muted">
+                edit-profile.sh
+              </span>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <h2 className="font-display font-bold text-xl text-body">
+                Edit Profile
+              </h2>
+
+              {fields.map(({ label, value, setter }) => (
+                <div key={label}>
+                  <label className="block font-mono text-xs text-muted mb-1.5">
+                    {label}
                   </label>
-                  <label className="form-control w-full max-w-xs my-2">
-                    <div className="label">
-                      <span className="label-text">Last Name:</span>
-                    </div>
-                    <input
-                      type="text"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      className="input input-bordered w-full max-w-xs"
-                    />
-                  </label>
-                  <label className="form-control w-full max-w-xs my-2">
-                    <div className="label">
-                      <span className="label-text">Photo URL :</span>
-                    </div>
-                    <input
-                      type="text"
-                      value={photoUrl}
-                      onChange={(e) => setPhotoUrl(e.target.value)}
-                      className="input input-bordered w-full max-w-xs"
-                    />
-                  </label>
-                  <label className="form-control w-full max-w-xs my-2">
-                    <div className="label">
-                      <span className="label-text"> Age:</span>
-                    </div>
-                    <input
-                      type="text"
-                      value={age}
-                      onChange={(e) => setAge(e.target.value)}
-                      className="input input-bordered w-full max-w-xs"
-                    />
-                  </label>
-                  <label className="form-control w-full max-w-xs my-2">
-                    <div className="label">
-                      <span className="label-text">Gender:</span>
-                    </div>
-                    <input
-                      type="text"
-                      value={gender}
-                      onChange={(e) => setGender(e.target.value)}
-                      className="input input-bordered w-full max-w-xs"
-                    />
-                  </label>
-                  <label className="form-control w-full max-w-xs my-2">
-                    <div className="label">
-                      <span className="label-text"> About:</span>
-                    </div>
-                    <input
-                      type="text"
-                      value={about}
-                      onChange={(e) => setAbout(e.target.value)}
-                      className="input input-bordered w-full max-w-xs"
-                    />
-                  </label>
+                  <input
+                    type="text"
+                    value={value}
+                    onChange={(e) => setter(e.target.value)}
+                    className="terminal-input"
+                  />
                 </div>
-                <p className="text-red-500">{error}</p>
-                <div className="card-actions justify-center m-2">
-                  <button className="btn btn-primary" onClick={setProfile}>
-                    Save Profile
-                  </button>
-                </div>
-              </div>
+              ))}
+
+              {error && (
+                <p className="font-mono text-xs text-red-400 bg-red-400/10 px-3 py-2 rounded-lg">
+                  ✗ {error}
+                </p>
+              )}
+
+              <button
+                className="w-full py-2.5 px-4 bg-accent text-bg font-display font-semibold rounded-lg hover:bg-accent-bright transition-all duration-200 active:scale-[0.98] shadow-glow-sm mt-2"
+                onClick={setProfile}
+              >
+                Save Profile
+              </button>
             </div>
           </div>
         </div>
 
-        <UserCard
-          user={{ firstName, lastName, photoUrl, age, gender, about }}
-        />
+        {/* Preview card */}
+        <div
+          className="w-full max-w-sm animate-slide-up"
+          style={{ animationDelay: "0.15s" }}
+        >
+          <p className="font-mono text-xs text-muted mb-3">
+            <span className="text-accent">$</span> preview
+          </p>
+          <UserCard
+            user={{ firstName, lastName, photoUrl, age, gender, about }}
+          />
+        </div>
       </div>
 
+      {/* Toast */}
       {toast && (
-        <div className="toast toast-top toast-center">
-          <div className="alert alert-success">
-            <span>Profile Edit successfully.</span>
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 animate-slide-up">
+          <div className="bg-elevated border border-accent/30 text-accent font-mono text-sm px-5 py-3 rounded-xl shadow-glow">
+            ✓ Profile updated successfully
           </div>
         </div>
       )}

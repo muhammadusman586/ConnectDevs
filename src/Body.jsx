@@ -36,9 +36,12 @@ const Body = () => {
   }, []);
 
   return (
-    <div>
+    <div className="min-h-screen bg-bg text-body relative">
+      <div className="noise-overlay" />
       <Navbar />
-      <Outlet />
+      <main className="pt-20 pb-16 relative z-[2]">
+        <Outlet />
+      </main>
       <Footer />
     </div>
   );
