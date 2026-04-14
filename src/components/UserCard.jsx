@@ -29,7 +29,7 @@ const UserCard = ({ user, hideActions = false, swipeDirection = null }) => {
     );
   }
 
-  const { _id, firstName, lastName, photoUrl, age, gender, about, skills } = user;
+  const { _id, firstName, lastName, photoUrl, age, gender, about, skills, github } = user;
   const MAX_DISPLAY = 4;
   const displaySkills = skills?.slice(0, MAX_DISPLAY) || [];
   const overflowCount = (skills?.length || 0) - MAX_DISPLAY;
@@ -74,6 +74,11 @@ const UserCard = ({ user, hideActions = false, swipeDirection = null }) => {
             {age && gender && (
               <p className="font-mono text-xs text-muted mt-1">
                 <span className="text-accent/60">#</span> {age} · {gender}
+                {github?.username && (
+                  <span className="ml-2 text-muted/40">
+                    · <span className="text-body/60">@{github.username}</span>
+                  </span>
+                )}
               </p>
             )}
           </div>

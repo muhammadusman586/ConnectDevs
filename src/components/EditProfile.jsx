@@ -2,6 +2,7 @@
 import { useState } from "react";
 import UserCard from "./UserCard";
 import SkillTagInput from "./SkillTagInput";
+import GitHubConnect from "./GitHubConnect";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch } from "react-redux";
@@ -93,6 +94,8 @@ const EditProfile = ({ user }) => {
               ))}
 
               <SkillTagInput skills={skills} onChange={setSkills} />
+
+              <GitHubConnect user={user} />
 
               {error && (
                 <p className="font-mono text-xs text-red-400 bg-red-400/10 px-3 py-2 rounded-lg">
