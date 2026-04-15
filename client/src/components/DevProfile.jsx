@@ -165,7 +165,7 @@ const DevProfile = () => {
           <div className="flex gap-3 pt-4 border-t border-border">
             {!user ? (
               <Link
-                to="/login"
+                to="/login?mode=signup"
                 className="flex-1 py-2.5 px-4 bg-accent text-bg font-display font-semibold rounded-lg text-center hover:bg-accent-bright transition-all duration-200 active:scale-[0.98] shadow-glow-sm"
               >
                 Sign up to connect

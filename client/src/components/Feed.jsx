@@ -169,7 +169,7 @@ const Feed = () => {
               👋 Browsing as guest
             </p>
             <Link
-              to="/login"
+              to="/login?mode=signup"
               className="shrink-0 px-3 py-1.5 bg-accent text-bg font-mono text-xs font-semibold rounded-lg hover:bg-accent-bright transition-all duration-200"
             >
               Sign up
@@ -239,7 +239,7 @@ const Feed = () => {
       <div className="flex gap-4 mt-6 animate-fade-in">
         {isGuest ? (
           <Link
-            to="/login"
+            to="/login?mode=signup"
             className="px-6 py-3 bg-accent text-bg font-display font-semibold rounded-full hover:bg-accent-bright transition-all duration-200 shadow-glow-sm"
           >
             Sign up to connect →

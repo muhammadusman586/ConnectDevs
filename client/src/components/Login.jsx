@@ -2,16 +2,19 @@ import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 
 const Login = () => {
+  const [searchParams] = useSearchParams();
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
-  const [isLoginForm, setIsLoginForm] = useState(true);
+  const [isLoginForm, setIsLoginForm] = useState(
+    searchParams.get("mode") !== "signup"
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogin = async () => {
