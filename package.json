@@ -1,0 +1,15 @@
+{
+  "name": "connectdevs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ConnectDevs — Developer social networking platform",
+  "workspaces": ["client", "server"],
+  "scripts": {
+    "dev:client": "npm run dev --workspace=client",
+    "dev:server": "npm run dev --workspace=server",
+    "build": "npm run build --workspace=client",
+    "start": "npm run start --workspace=server",
+    "seed": "npm run seed --workspace=server",
+    "lint": "npm run lint --workspace=client"
+  }
+}

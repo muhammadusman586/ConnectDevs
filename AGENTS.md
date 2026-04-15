@@ -8,9 +8,10 @@
 
 **ConnectDevs** is a developer social networking platform — think "Tinder for developers." Users discover other developers through a card-based feed, send connection requests (interested/ignore), and manage their network.
 
-- **Frontend**: React 18 + Vite + Redux Toolkit + React Router v7 + Tailwind CSS + DaisyUI v4
-- **Backend**: Node.js + Express + MongoDB/Mongoose (runs on `localhost:3001`) — sibling repo at `../ConnectDevs-backend/`
-- **API base**: `http://localhost:3001` (see `src/utils/constants.js`)
+- **Frontend**: React 18 + Vite + Redux Toolkit + React Router v7 + Tailwind CSS + DaisyUI v4 (`client/`)
+- **Backend**: Node.js + Express + MongoDB/Mongoose (runs on `localhost:3001`) (`server/`)
+- **API base**: `http://localhost:3001` (see `client/src/utils/constants.js`)
+- **Monorepo**: npm workspaces — root `package.json` provides convenience scripts
 
 ---
 
@@ -57,14 +58,14 @@ The custom DaisyUI theme is named `"terminal"` and is set via `data-theme="termi
 
 ### Directory Structure
 ```
-src/
-├── App.jsx                 # Router setup (BrowserRouter + Routes)
-├── Body.jsx                # Layout wrapper (Navbar + Outlet + Footer + noise overlay)
-├── main.jsx                # Entry point
-├── index.css               # Global styles (noise, scrollbar, inputs, animations)
-├── App.css                 # (empty)
-├── components/
-│   ├── Navbar.jsx          # Fixed top nav, logo, avatar dropdown
+client/                         # Frontend (React + Vite)
+├── src/
+│   ├── App.jsx                 # Router setup (BrowserRouter + Routes)
+│   ├── Body.jsx                # Layout wrapper (Navbar + Outlet + Footer + noise overlay)
+│   ├── main.jsx                # Entry point
+│   ├── index.css               # Global styles (noise, scrollbar, inputs, animations)
+│   ├── components/
+│   │   ├── Navbar.jsx          # Fixed top nav, logo, avatar dropdown
 │   ├── Footer.jsx          # Fixed bottom bar
 │   ├── Login.jsx           # Login/Signup form (terminal window card)
 │   ├── Feed.jsx            # Discover developers (shows UserCard)
@@ -72,24 +73,43 @@ src/
 │   ├── Profile.jsx         # Renders EditProfile
 │   ├── EditProfile.jsx     # Edit form + live preview card
 │   ├── Connections.jsx     # List of accepted connections
-│   └── Requests.jsx        # Incoming connection requests (accept/reject)
-└── utils/
-    ├── appStore.js         # Redux store config
-    ├── constants.js        # BASE_URL
-    ├── userSlice.js        # Current user state
-    ├── feedSlice.js        # Feed (array of users to discover)
-    ├── connectionSlice.js  # Connections list
-    └── requestSlice.js     # Pending requests list
+│   │   └── Requests.jsx        # Incoming connection requests (accept/reject)
+│   └── utils/
+│       ├── appStore.js         # Redux store config
+│       ├── constants.js        # BASE_URL
+│       ├── userSlice.js        # Current user state
+│       ├── feedSlice.js        # Feed (array of users to discover)
+│       ├── connectionSlice.js  # Connections list
+│       └── requestSlice.js     # Pending requests list
+├── package.json
+├── vite.config.js
+└── tailwind.config.js
+
+server/                         # Backend (Node.js + Express)
+├── src/
+│   ├── app.js                  # Express app + Socket.IO setup
+│   ├── config/                 # DB + socket config
+│   ├── middlewares/            # Auth middleware
+│   ├── models/                 # Mongoose models
+│   └── routes/                 # API route handlers
+├── scripts/
+│   └── seed.js                 # Seed 100 developer profiles
+└── package.json
 ```
 
 ### Routes
 | Path            | Component     | Auth Required |
 |----------------|---------------|---------------|
-| `/`            | Feed          | Yes           |
+| `/`            | Feed          | No (guest-aware) |
 | `/login`       | Login         | No            |
+| `/explore`     | Explore       | No            |
+| `/leaderboard` | Leaderboard   | No            |
+| `/dev/:userId` | DevProfile    | No            |
 | `/profile`     | Profile       | Yes           |
 | `/connections` | Connections   | Yes           |
 | `/requests`    | Requests      | Yes           |
+| `/chat`        | Chat          | Yes           |
+| `/chat/:userId`| ChatWindow    | Yes           |
 
 ### API Endpoints Used
 | Method | Endpoint                              | Purpose                    |
@@ -110,19 +130,25 @@ src/
 ## Build & Dev Commands
 
 ```bash
-npm run dev      # Start Vite dev server
-npm run build    # Production build (vite build)
-npm run lint     # ESLint (note: pre-existing require() warning in tailwind.config.js)
-npm run preview  # Preview production build
+# From repo root (npm workspaces)
+npm run dev:client   # Start Vite dev server (client)
+npm run dev:server   # Start backend with nodemon (server)
+npm run build        # Production build (client)
+npm run seed         # Seed 100 developer profiles (server)
+npm run lint         # ESLint (client)
+
+# Or from individual directories
+cd client && npm run dev
+cd server && npm run dev
 ```
 
 ---
 
 ## Coding Conventions
 
-- **State management**: Redux Toolkit slices in `src/utils/`
+- **State management**: Redux Toolkit slices in `client/src/utils/`
 - **API calls**: Axios with `withCredentials: true` for cookie-based auth
-- **Styling**: Tailwind utility classes + custom CSS classes in `index.css`. Avoid DaisyUI component classes for visuals (except `dropdown`, `menu` for functionality)
+- **Styling**: Tailwind utility classes + custom CSS classes in `client/src/index.css`. Avoid DaisyUI component classes for visuals (except `dropdown`, `menu` for functionality)
 - **Font classes**: `font-display` (Syne), `font-sans` (DM Sans), `font-mono` (Fira Code)
 - **Color classes**: `text-accent`, `bg-elevated`, `border-border`, `text-muted`, `bg-surface`, `bg-bg`
 - **ESLint**: Some `react-hooks/exhaustive-deps` warnings are suppressed with comments
@@ -132,5 +158,5 @@ npm run preview  # Preview production build
 
 ## Feature Roadmap
 
-See `docs/FEATURES_SPEC.md` for the full feature specification and build order.
-See `../ConnectDevs-backend/AGENTS.md` and `../ConnectDevs-backend/docs/FEATURES_SPEC.md` for backend context and API specs.
+See `client/docs/FEATURES_SPEC.md` and `server/docs/FEATURES_SPEC.md` for the full feature specification and build order.
+See `server/AGENTS.md` for backend-specific context and API specs.
