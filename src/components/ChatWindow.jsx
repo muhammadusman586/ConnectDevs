@@ -6,6 +6,7 @@ import { BASE_URL } from "../utils/constants";
 import { setMessages, addMessage } from "../utils/chatSlice";
 import { getSocket } from "../utils/socketManager";
 import MessageBubble from "./MessageBubble";
+import Avatar from "./Avatar";
 
 const ChatWindow = () => {
   const { userId } = useParams();
@@ -143,10 +144,11 @@ const ChatWindow = () => {
         {peer && (
           <>
             <div className="relative">
-              <img
+              <Avatar
                 src={peer.photoUrl}
-                alt={peer.firstName}
-                className="w-9 h-9 rounded-full object-cover border border-border"
+                name={`${peer.firstName} ${peer.lastName}`}
+                size="w-9 h-9"
+                className="border border-border"
               />
               {isOnline && (
                 <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-elevated" />
@@ -208,7 +210,7 @@ const ChatWindow = () => {
               onKeyDown={handleKeyDown}
               placeholder="Type a message..."
               rows={1}
-              className="w-full pl-7 pr-3 py-2.5 bg-surface border border-border rounded-lg font-mono text-sm text-body placeholder:text-muted/30 focus:border-accent/40 focus:shadow-[0_0_0_1px_rgba(255,138,0,0.15)] transition-all duration-200 outline-none resize-none"
+              className="w-full pl-7 pr-3 py-2.5 bg-surface border border-border rounded-lg font-mono text-sm text-body placeholder:text-muted/30 focus:border-accent/40 accent-focus-ring transition-all duration-200 outline-none resize-none"
             />
           </div>
           <button

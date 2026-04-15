@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import SkeletonListItem from "./skeletons/SkeletonListItem";
+import Avatar from "./Avatar";
 
 const Chat = () => {
   const [connections, setConnections] = useState(null);
@@ -98,10 +99,11 @@ const Chat = () => {
               style={{ animationDelay: `${index * 0.04}s` }}
             >
               <div className="relative shrink-0">
-                <img
-                  alt={conn.firstName}
-                  className="w-12 h-12 rounded-full object-cover border-2 border-border"
+                <Avatar
                   src={conn.photoUrl}
+                  name={`${conn.firstName} ${conn.lastName}`}
+                  size="w-12 h-12"
+                  className="border-2 border-border"
                 />
                 {isOnline && (
                   <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-elevated" />

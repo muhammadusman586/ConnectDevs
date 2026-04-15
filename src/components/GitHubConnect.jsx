@@ -37,8 +37,11 @@ const GitHubConnect = ({ user }) => {
       await axios.delete(BASE_URL + "/github/disconnect", {
         withCredentials: true,
       });
-      // Update user in store — remove github field
-      dispatch(addUser({ ...user, github: undefined }));
+      // Refetch profile to get clean user data
+      const res = await axios.get(BASE_URL + "/profile/view", {
+        withCredentials: true,
+      });
+      dispatch(addUser(res.data));
     } catch (err) {
       console.error(err);
     }
@@ -106,7 +109,7 @@ const GitHubConnect = ({ user }) => {
             onChange={(e) => setUsername(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleConnect()}
             placeholder="username"
-            className="w-full pl-7 pr-3 py-2.5 bg-surface border border-border rounded-lg font-mono text-sm text-body placeholder:text-muted/30 focus:border-accent/40 focus:shadow-[0_0_0_1px_rgba(255,138,0,0.15)] transition-all duration-200 outline-none"
+            className="w-full pl-7 pr-3 py-2.5 bg-surface border border-border rounded-lg font-mono text-sm text-body placeholder:text-muted/30 focus:border-accent/40 accent-focus-ring transition-all duration-200 outline-none"
           />
         </div>
         <button

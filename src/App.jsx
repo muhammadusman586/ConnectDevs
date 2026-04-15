@@ -12,6 +12,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./components/NotFound";
 import Chat from "./components/Chat";
 import ChatWindow from "./components/ChatWindow";
+import Explore from "./components/Explore";
+import Leaderboard from "./components/Leaderboard";
+import DevProfile from "./components/DevProfile";
 
 function App() {
   return (
@@ -19,9 +22,15 @@ function App() {
       <BrowserRouter basename="/">
         <Routes>
           <Route path="/" element={<Body />}>
+            {/* Public routes */}
+            <Route index element={<Feed />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/dev/:userId" element={<DevProfile />} />
+
+            {/* Protected routes */}
             <Route element={<ProtectedRoute />}>
-              <Route index element={<Feed />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/connections" element={<Connections />} />
               <Route path="/requests" element={<Requests />} />

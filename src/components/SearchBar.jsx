@@ -33,7 +33,7 @@ const SearchBar = ({ value, onChange, placeholder = "Search..." }) => {
         value={local}
         onChange={handleChange}
         placeholder={placeholder}
-        className="w-full pl-7 pr-9 py-2.5 bg-surface border border-border rounded-lg font-mono text-sm text-body placeholder:text-muted/30 focus:border-accent/40 focus:shadow-[0_0_0_1px_rgba(255,138,0,0.15)] transition-all duration-200 outline-none"
+        className="w-full pl-7 pr-9 py-2.5 bg-surface border border-border rounded-lg font-mono text-sm text-body placeholder:text-muted/30 focus:border-accent/40 accent-focus-ring transition-all duration-200 outline-none"
       />
       {local && (
         <button

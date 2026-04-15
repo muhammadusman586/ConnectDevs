@@ -58,7 +58,7 @@ const SkillTagInput = ({ skills, onChange, maxSkills = 10 }) => {
       </label>
 
       {/* Tags + input row */}
-      <div className="flex flex-wrap gap-1.5 p-2.5 bg-surface border border-border rounded-lg focus-within:border-accent/40 focus-within:shadow-[0_0_0_1px_rgba(255,138,0,0.15)] transition-all duration-200">
+      <div className="flex flex-wrap gap-1.5 p-2.5 bg-surface border border-border rounded-lg focus-within:border-accent/40 accent-focus-ring-within transition-all duration-200">
         {skills.map((skill) => (
           <SkillBadge key={skill} skill={skill} onRemove={removeSkill} />
         ))}

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch } from "react-redux";
@@ -5,6 +6,31 @@ import { removeUserFromFeed } from "../utils/feedSlice";
 import SkillBadge from "./SkillBadge";
 
 /* eslint-disable react/prop-types */
+
+function getFallbackUrl(name) {
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=FF8A00&color=1a1a00&size=400&bold=true&format=png`;
+}
+
+const UserPhoto = ({ src, name }) => {
+  const [imgSrc, setImgSrc] = useState(src || getFallbackUrl(name));
+  const [failed, setFailed] = useState(false);
+
+  return (
+    <img
+      src={imgSrc}
+      alt={`${name}'s photo`}
+      className="w-full h-full object-cover"
+      loading="lazy"
+      onError={() => {
+        if (!failed) {
+          setFailed(true);
+          setImgSrc(getFallbackUrl(name));
+        }
+      }}
+    />
+  );
+};
+
 const UserCard = ({ user, hideActions = false, swipeDirection = null }) => {
   const dispatch = useDispatch();
 
@@ -56,12 +82,8 @@ const UserCard = ({ user, hideActions = false, swipeDirection = null }) => {
           </div>
         )}
         {/* Photo */}
-        <div className="relative aspect-[4/3] overflow-hidden">
-          <img
-            src={photoUrl}
-            alt={`${firstName}'s photo`}
-            className="w-full h-full object-cover"
-          />
+        <div className="relative aspect-[4/3] overflow-hidden bg-surface">
+          <UserPhoto src={photoUrl} name={`${firstName} ${lastName}`} />
           <div className="absolute inset-0 bg-gradient-to-t from-elevated via-transparent to-transparent" />
         </div>
 

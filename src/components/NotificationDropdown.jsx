@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
+import Avatar from "./Avatar";
 import {
   setNotifications,
   markAllRead,
@@ -149,10 +150,11 @@ const NotificationDropdown = () => {
                 >
                   {/* Avatar or icon */}
                   {notif.fromUserId?.photoUrl ? (
-                    <img
+                    <Avatar
                       src={notif.fromUserId.photoUrl}
-                      alt=""
-                      className="w-8 h-8 rounded-full object-cover border border-border shrink-0 mt-0.5"
+                      name={notif.fromUserId.firstName || "User"}
+                      size="w-8 h-8"
+                      className="border border-border shrink-0 mt-0.5"
                     />
                   ) : (
                     <div className="w-8 h-8 rounded-full bg-surface border border-border flex items-center justify-center shrink-0 mt-0.5">

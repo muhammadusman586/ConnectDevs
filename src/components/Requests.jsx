@@ -5,6 +5,7 @@ import { addRequests, removeRequest } from "../utils/requestSlice";
 import { useEffect } from "react";
 import SkillBadge from "./SkillBadge";
 import SkeletonListItem from "./skeletons/SkeletonListItem";
+import Avatar from "./Avatar";
 
 const Requests = () => {
   const requests = useSelector((store) => store.requests);
@@ -93,10 +94,11 @@ const Requests = () => {
               className="flex items-center gap-4 p-4 bg-elevated border border-border rounded-xl card-glow animate-slide-up"
               style={{ animationDelay: `${index * 0.05}s` }}
             >
-              <img
-                alt={firstName}
-                className="w-14 h-14 rounded-full object-cover border-2 border-border"
+              <Avatar
                 src={photoUrl}
+                name={`${firstName} ${lastName}`}
+                size="w-14 h-14"
+                className="border-2 border-border"
               />
               <div className="flex-1 min-w-0">
                 <h2 className="font-display font-semibold text-body truncate">
