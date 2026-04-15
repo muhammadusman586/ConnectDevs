@@ -8,7 +8,7 @@ import SkillBadge from "./SkillBadge";
 
 const DevProfile = () => {
   const { userId } = useParams();
-  const user = useSelector((store) => store.user);
+  const user = useSelector((store) => store.user.data);
   const navigate = useNavigate();
   const [dev, setDev] = useState(null);
   const [loading, setLoading] = useState(true);

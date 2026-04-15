@@ -5,7 +5,7 @@ import SkeletonProfile from "./skeletons/SkeletonProfile"
 
 
 const Profile = () => {
-  const user = useSelector((store) => store.user);
+  const user = useSelector((store) => store.user.data);
 
   if (!user)
     return (

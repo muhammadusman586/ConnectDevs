@@ -17,7 +17,7 @@ import {
 import { addNotification } from "../utils/notificationSlice";
 
 const ProtectedRoute = () => {
-  const user = useSelector((store) => store.user);
+  const user = useSelector((store) => store.user.data);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isVerifying, setIsVerifying] = useState(true);

@@ -2,17 +2,21 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const userSlice = createSlice({
   name: "user",
-  initialState: null,
+  initialState: { data: null, authChecked: false },
   reducers: {
     addUser: (state, action) => {
-      return action.payload;
+      state.data = action.payload;
+      state.authChecked = true;
     },
     // eslint-disable-next-line no-unused-vars
-    removeUser: (state, action) => {
-      return null;
+    removeUser: (state) => {
+      state.data = null;
+    },
+    setAuthChecked: (state) => {
+      state.authChecked = true;
     },
   },
 });
 
-export const {addUser,removeUser}=userSlice.actions;
+export const { addUser, removeUser, setAuthChecked } = userSlice.actions;
 export default userSlice.reducer;

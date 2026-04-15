@@ -11,7 +11,7 @@ import Avatar from "./Avatar";
 const ChatWindow = () => {
   const { userId } = useParams();
   const dispatch = useDispatch();
-  const currentUser = useSelector((store) => store.user);
+  const currentUser = useSelector((store) => store.user.data);
   const messages = useSelector((store) => store.chat.messages[userId] || []);
   const onlineUsers = useSelector((store) => store.chat.onlineUsers);
   const typingUsers = useSelector((store) => store.chat.typingUsers);

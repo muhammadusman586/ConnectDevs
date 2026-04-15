@@ -14,7 +14,8 @@ const DEFAULT_FILTERS = { skills: [], minAge: "", maxAge: "", gender: "" };
 
 const Feed = () => {
   const feed = useSelector((store) => store.feed);
-  const user = useSelector((store) => store.user);
+  const user = useSelector((store) => store.user.data);
+  const authChecked = useSelector((store) => store.user.authChecked);
   const dispatch = useDispatch();
   const [swipeDirection, setSwipeDirection] = useState(null);
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
@@ -62,12 +63,13 @@ const Feed = () => {
   };
 
   useEffect(() => {
+    if (!authChecked) return;
     if (isGuest) {
       getGuestFeed();
     } else {
       getFeed();
     }
-  }, [isGuest]);
+  }, [isGuest, authChecked]);
 
   // Re-fetch when filters change (auth only)
   const handleFilterChange = (newFilters) => {

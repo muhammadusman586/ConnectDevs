@@ -3,17 +3,20 @@ import { Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "./utils/constants";
-import { addUser } from "./utils/userSlice";
+import { addUser, setAuthChecked } from "./utils/userSlice";
 
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 
 const Body = () => {
-  const user = useSelector((store) => store.user);
+  const user = useSelector((store) => store.user.data);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (user) return;
+    if (user) {
+      dispatch(setAuthChecked());
+      return;
+    }
     const checkAuth = async () => {
       try {
         const res = await axios.get(BASE_URL + "/profile/view", {
@@ -21,7 +24,8 @@ const Body = () => {
         });
         dispatch(addUser(res.data));
       } catch {
-        // Not logged in — that's fine, continue as guest
+        // Not logged in — continue as guest
+        dispatch(setAuthChecked());
       }
     };
     checkAuth();

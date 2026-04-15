@@ -11,7 +11,7 @@ import NotificationDropdown from "./NotificationDropdown";
 import Avatar from "./Avatar";
 
 const Navbar = () => {
-  const user = useSelector((store) => store.user);
+  const user = useSelector((store) => store.user.data);
   const unreadCount = useSelector((store) => store.chat.unreadCount);
   const dispatch = useDispatch();
   const navigate = useNavigate();
