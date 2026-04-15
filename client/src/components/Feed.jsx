@@ -162,21 +162,23 @@ const Feed = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
       {/* Guest banner */}
-      {isGuest && (
-        <div className="w-full max-w-sm mb-4 animate-fade-in">
-          <div className="bg-accent/10 border border-accent/30 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
-            <p className="font-mono text-xs text-accent">
-              👋 Browsing as guest
-            </p>
-            <Link
-              to="/login?mode=signup"
-              className="shrink-0 px-3 py-1.5 bg-accent text-bg font-mono text-xs font-semibold rounded-lg hover:bg-accent-bright transition-all duration-200"
-            >
-              Sign up
-            </Link>
-          </div>
-        </div>
-      )}
+      {
+      // isGuest && (
+      //   <div className="w-full max-w-sm mb-4 animate-fade-in">
+      //     <div className="bg-accent/10 border border-accent/30 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+      //       {/* <p className="font-mono text-xs text-accent">
+      //         👋 Browsing as guest
+      //       </p> */}
+      //       <Link
+      //         to="/login?mode=signup"
+      //         className="shrink-0 px-3 py-1.5 bg-accent text-bg font-mono text-xs font-semibold rounded-lg hover:bg-accent-bright transition-all duration-200"
+      //       >
+      //         Sign up
+      //       </Link>
+      //     </div>
+      //   </div>
+      // )
+      }
 
       {!isGuest && (
         <div className="mb-4 w-full max-w-sm">
